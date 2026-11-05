@@ -15,9 +15,6 @@ jobs:
       - name: List files
         run: ls -la
 
-      - name: Install Package
+      - name: Run Shell Script
         run: |
-          sudo apt-get install -y figlet
-          figlet -f slant "GH-200 CoHack"
-          echo "----------------------------"
-          figlet -f digital "GitHub Actions"
+         ./scripts/greet.sh
