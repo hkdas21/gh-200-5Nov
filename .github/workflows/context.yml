@@ -1,0 +1,31 @@
+name: context
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only deploy on push to main, not PRs
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Show Context Info
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "SHA: ${{ github.sha }}"
+          echo "Runner: ${{ runner.os }} / ${{ runner.arch }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run Number: ${{ github.run_number }}"
+
+      - name: Deploy Step (only on success)
+        if: success()
+        run: echo "Deploying to production!"
+
+      - name: Notify on Failure
+        if: failure()
+        run: echo "Deployment failed! Sending alert..."
+
+      - name: Always Cleanup
+        if: always()
+        run: echo "Cleaning up resources..."
