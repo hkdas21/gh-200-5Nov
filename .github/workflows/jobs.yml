@@ -25,11 +25,22 @@ jobs:
           echo "Build completed at $(date)" > build-report.txt
           cat build-report.txt
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: build-report
+          path: build-report.txt
+          retention-days: 2
+
   test:
     runs-on: ubuntu-latest
     needs: build                    # ← Runs AFTER build
     steps:
-      - name: 🧪 Simulate Tests
-        run: |
-          echo "Running tests..."
-          echo "✅ All tests passed!"
+      - name: Download Artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: build-report
+          
+      - name: Inspect Atifact
+        run: cat build-report.txt
+          
